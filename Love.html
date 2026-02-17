@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Clarita | De tu Príncipe Azul Manu</title>
+  <style>
+    :root {
+      --rosa-1: #ffd3e2;
+      --rosa-2: #ff8fb1;
+      --rojo-suave: #e43f73;
+      --rojo-profundo: #8f1b44;
+      --blanco: #fffafc;
+      --dorado: #f1c76a;
+      --texto: #391628;
+      --glass: rgba(255, 255, 255, 0.72);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--texto);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.5) 0%, transparent 24%),
+        radial-gradient(circle at 80% 10%, rgba(241, 199, 106, 0.34) 0%, transparent 20%),
+        linear-gradient(160deg, #ffe7ef 0%, #ffc2d7 38%, #ff9bbb 65%, #ffd8e6 100%);
+      overflow-x: hidden;
+    }
+
+    .layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .sparkles::before,
+    .sparkles::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.85) 1px, transparent 2px),
+        radial-gradient(circle, rgba(241,199,106,0.7) 1px, transparent 2px);
+      background-size: 120px 120px, 170px 170px;
+      animation: driftUp 11s linear infinite;
+      opacity: 0.45;
+    }
+
+    .sparkles::after {
+      animation-duration: 16s;
+      transform: scale(1.2);
+      opacity: 0.3;
+    }
+
+    .particle {
+      position: absolute;
+      user-select: none;
+      opacity: 0.6;
+      animation: fall linear infinite;
+    }
+
+    main {
+      width: min(1080px, 93%);
+      margin: 28px auto 42px;
+    }
+
+    .hero {
+      position: relative;
+      border: 1px solid rgba(143, 27, 68, 0.2);
+      border-radius: 26px;
+      padding: 48px 22px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,239,245,0.7));
+      box-shadow: 0 22px 42px rgba(143, 27, 68, 0.18);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "❤";
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      color: rgba(228, 63, 115, 0.45);
+      font-size: 30px;
+      animation: pulse 1.6s infinite;
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", "Times New Roman", serif;
+      color: var(--rojo-profundo);
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 4.9vw, 3.2rem);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #6f2442;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    section {
+      margin-top: 18px;
+      border-radius: 20px;
+      padding: 24px 18px;
+      border: 1px solid rgba(143, 27, 68, 0.16);
+      background: var(--glass);
+      box-shadow: 0 13px 28px rgba(143, 27, 68, 0.14);
+      backdrop-filter: blur(2px);
+      transition: transform 0.25s ease;
+    }
+
+    section:hover { transform: translateY(-2px); }
+
+    h2 {
+      font-size: clamp(1.4rem, 3.8vw, 2rem);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    p { line-height: 1.68; font-size: 1.08rem; }
+
+    .love-letter {
+      font-size: 1.12rem;
+      background: linear-gradient(180deg, rgba(255, 236, 243, 0.75), rgba(255,255,255,0.82));
+      border: 1px solid rgba(228, 63, 115, 0.22);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .signature {
+      text-align: right;
+      margin-top: 10px;
+      font-size: 1.06rem;
+      color: #70233e;
+      font-weight: 700;
+    }
+
+    .reasons {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .reasons li {
+      background: linear-gradient(90deg, rgba(255,224,235,0.88), rgba(255,255,255,0.92));
+      border-left: 4px solid var(--rojo-suave);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 1.02rem;
+    }
+
+    .phrase-strip {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+      text-align: center;
+      font-style: italic;
+      color: #6f2442;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 4px;
+      bottom: 4px;
+      width: 3px;
+      background: linear-gradient(var(--rojo-suave), var(--dorado));
+      border-radius: 999px;
+    }
+
+    .moment {
+      position: relative;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(143,27,68,0.14);
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .moment::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      top: 16px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--dorado);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px rgba(143,27,68,0.2);
+    }
+
+    .moment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .shot {
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(143,27,68,0.16);
+    }
+
+    .shot img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .shot p {
+      padding: 8px;
+      font-size: 0.98rem;
+      text-align: center;
+    }
+
+    .promises {
+      display: grid;
+      gap: 9px;
+      list-style: none;
+    }
+
+    .promises li {
+      background: rgba(255,255,255,0.82);
+      border-radius: 10px;
+      border: 1px solid rgba(143,27,68,0.14);
+      padding: 10px;
+    }
+
+    .interactive {
+      text-align: center;
+    }
+
+    .heart-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .heart-btn {
+      border: none;
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      font-size: 24px;
+      cursor: pointer;
+      background: linear-gradient(140deg, #ff4c83, #bf1d52);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(143,27,68,0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .heart-btn:hover { transform: scale(1.08); }
+
+    .random-phrase {
+      margin-top: 12px;
+      min-height: 22px;
+      color: #6f2442;
+      font-weight: 700;
+    }
+
+    .secret-wrap {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .secret-btn {
+      border: 1px dashed rgba(143,27,68,0.4);
+      background: rgba(255,255,255,0.6);
+      color: #6f2442;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .secret-msg {
+      margin-top: 10px;
+      display: none;
+      background: rgba(255,255,255,0.82);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgba(143,27,68,0.18);
+    }
+
+    .controls {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .controls button {
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #ff3e79, #c61d53);
+      color: white;
+      font-weight: 700;
+      padding: 9px 13px;
+      cursor: pointer;
+    }
+
+    .final-message {
+      margin-top: 18px;
+      text-align: center;
+      color: #6a1f3d;
+      font-size: clamp(1.12rem, 2.8vw, 1.5rem);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes driftUp {
+      from { transform: translateY(0); }
+      to { transform: translateY(-45px); }
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-12vh) translateX(0) rotate(0deg); }
+      100% { transform: translateY(110vh) translateX(30px) rotate(220deg); }
+    }
+
+    @media (max-width: 860px) {
+      .reasons { grid-template-columns: 1fr; }
+      .moment-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .moment-grid { grid-template-columns: 1fr; }
+      .hero { padding: 40px 14px; }
+      section { padding: 20px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layer sparkles"></div>
+  <div class="layer" id="particles"></div>
+
+  <main>
+    <header class="hero">
+      <h1>Para Clarita, de tu Príncipe Azul Manu</h1>
+      <p class="sub">
+        Un espacio hecho para recordarte que mi amor por ti no depende de fechas:
+        crece en cada detalle, en cada mirada y en cada día que compartimos.
+      </p>
+    </header>
+
+    <section>
+      <h2>Carta de Amor</h2>
+      <p class="love-letter">
+        Clarita, desde que llegaste, mi mundo dejó de correr y empezó a tener sentido.
+        Eres esa calma que me ordena por dentro y esa alegría que me despierta por fuera.
+        Contigo descubrí que amar no es prometer perfección, sino elegirnos incluso en lo
+        cotidiano: en los mensajes simples, en los silencios cómodos, en el abrazo que cura
+        un día difícil. Si alguna vez dudas, recuerda esto: te amo con verdad, con respeto y
+        con una admiración que no se agota. Mi corazón siempre regresa a ti, porque en ti está mi hogar.
+      </p>
+      <p class="signature">Con amor real, Manu.</p>
+    </section>
+
+    <section>
+      <h2>10 Razones Por Las Que Te Amo</h2>
+      <ul class="reasons">
+        <li>Tu sonrisa me devuelve la luz incluso en días pesados.</li>
+        <li>Tu forma de cuidar a los demás me inspira a ser mejor.</li>
+        <li>Cuando me hablas, siento paz.</li>
+        <li>Eres fuerte, sensible y auténtica al mismo tiempo.</li>
+        <li>Conviertes lo simple en momentos inolvidables.</li>
+        <li>Tu mirada tiene esa magia que me calma.</li>
+        <li>Me haces sentir amado de manera honesta.</li>
+        <li>Celebras mis alegrías como si fueran tuyas.</li>
+        <li>Eres mi compañera favorita para soñar el futuro.</li>
+        <li>Porque contigo, amar se siente fácil y verdadero.</li>
+      </ul>
+      <div class="phrase-strip">
+        <p>"No eres mi mitad, eres mi elección diaria."</p>
+        <p>"Mi lugar favorito en el mundo empieza donde estás tú."</p>
+        <p>"Cada latido trae tu nombre escrito en voz baja."</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Nuestros Momentos</h2>
+      <div class="timeline">
+        <article class="moment"><strong>Primer encuentro:</strong> El día en que todo empezó a verse más bonito.</article>
+        <article class="moment"><strong>Nuestra primera risa larga:</strong> Ahí supe que contigo la vida se disfruta distinto.</article>
+        <article class="moment"><strong>Promesa silenciosa:</strong> Cuidarnos siempre, aun en lo pequeño.</article>
+      </div>
+      <div class="moment-grid">
+        <article class="shot">
+          <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=900&q=80" alt="Abrazo romántico" />
+          <p>Una tarde que se volvió recuerdo eterno.</p>
+        </article>
+        <article class="shot">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80" alt="Rosas rojas" />
+          <p>Rosas para ti, porque mereces belleza todos los días.</p>
+        </article>
+        <article class="shot">
+          <img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" alt="Globos de San Valentín" />
+          <p>Celebrarte no se limita a una fecha.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Promesas de Amor</h2>
+      <ul class="promises">
+        <li>Prometo escucharte de verdad, siempre.</li>
+        <li>Prometo proteger tu paz y cuidar tu corazón.</li>
+        <li>Prometo admirarte incluso cuando tú no lo notes.</li>
+        <li>Prometo construir contigo una historia honesta y bonita.</li>
+      </ul>
+    </section>
+
+    <section class="interactive">
+      <h2>Corazones Interactivos</h2>
+      <p>Haz clic en un corazón y aparecerá una frase para ti.</p>
+      <div class="heart-buttons">
+        <button class="heart-btn" type="button">❤</button>
+        <button class="heart-btn" type="button">❤</button>
+        <button class="heart-btn" type="button">❤</button>
+      </div>
+      <p class="random-phrase" id="randomPhrase"></p>
+
+      <div class="secret-wrap">
+        <button class="secret-btn" id="secretBtn" type="button">Botón secreto</button>
+        <p class="secret-msg" id="secretMsg">
+          Sorpresa, mi Clarita: en cada plan que imagino, tú eres el capítulo más importante.
+        </p>
+      </div>
+
+      <div class="controls">
+        <audio id="bgMusic" loop>
+          <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8f16fbc6f4.mp3?filename=romantic-112194.mp3" type="audio/mp3" />
+        </audio>
+        <button id="musicBtn" type="button">Música romántica: activar</button>
+      </div>
+    </section>
+
+    <p class="final-message">
+      Clarita, gracias por existir en mi vida. Si el amor tuviera forma, para mí tendría tu nombre.
+      Te amo infinitamente, tu Príncipe Azul Manu.
+    </p>
+  </main>
+
+  <script>
+    const particlesWrap = document.getElementById("particles");
+    const symbols = ["❤", "✦", "❀", "❤"];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement("span");
+      p.className = "particle";
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.fontSize = 12 + Math.random() * 16 + "px";
+      p.style.animationDuration = 8 + Math.random() * 8 + "s";
+      p.style.animationDelay = Math.random() * 6 + "s";
+      particlesWrap.appendChild(p);
+    }
+
+    const phrases = [
+      "Eres mi tranquilidad favorita.",
+      "Mi amor por ti no sabe de pausas.",
+      "Tu sonrisa es mi lugar seguro.",
+      "Te elegiría en todas las versiones de la vida.",
+      "Contigo, todo tiene sentido.",
+      "Siempre tú, siempre nosotros."
+    ];
+
+    const randomPhrase = document.getElementById("randomPhrase");
+    document.querySelectorAll(".heart-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        randomPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      });
+    });
+
+    const secretBtn = document.getElementById("secretBtn");
+    const secretMsg = document.getElementById("secretMsg");
+    let secretShown = false;
+    secretBtn.addEventListener("click", () => {
+      secretShown = !secretShown;
+      secretMsg.style.display = secretShown ? "block" : "none";
+    });
+
+    const musicBtn = document.getElementById("musicBtn");
+    const bgMusic = document.getElementById("bgMusic");
+    let playing = false;
+    musicBtn.addEventListener("click", async () => {
+      try {
+        if (!playing) {
+          await bgMusic.play();
+          musicBtn.textContent = "Música romántica: pausar";
+        } else {
+          bgMusic.pause();
+          musicBtn.textContent = "Música romántica: activar";
+        }
+        playing = !playing;
+      } catch (error) {
+        musicBtn.textContent = "No se pudo reproducir";
+      }
+    });
+  </script>
+</body>
+</html>
